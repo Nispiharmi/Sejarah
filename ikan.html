@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Sejarah: Perlawanan Maluku Utara & Kuis</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #2b1810;
+            background-image: radial-gradient(circle, #3d2317 0%, #1a0f0a 100%);
+            color: #2c1d11;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .book-container {
+            width: 950px;
+            max-width: 100%;
+            background: #f4ecd8;
+            background-image: linear-gradient(to right, #e8dfc8 0%, #f4ecd8 5%, #f4ecd8 95%, #e8dfc8 100%);
+            border-radius: 8px 15px 15px 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 0 40px rgba(139,90,43,0.15);
+            padding: 50px;
+            position: relative;
+            border: 2px solid #5a3825;
+            box-sizing: border-box;
+        }
+    
+        h1, h2 {
+            color: #5a2e18;
+            text-align: center;
+            font-family: 'Georgia', serif;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+        }
+        h3 {
+            color: #6b3410;
+            border-bottom: 1px solid #b59b7d;
+            padding-bottom: 4px;
+            margin-top: 25px;
+            font-size: 1.15em;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        button {
+            background-color: #8b5a2b;
+            color: #fdfbf7;
+            border: 1px solid #5a3825;
+            padding: 10px 22px;
+            font-size: 15px;
+            font-family: 'Georgia', serif;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 15px auto;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            background-color: #6b4226;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transform: translateY(1px);
+        }
+        .secondary-btn {
+            background-color: #596068;
+            border-color: #3b4046;
+        }
+        .secondary-btn:hover {
+            background-color: #3f4449;
+        }
+        .guestbook-btn {
+            background-color: #276735;
+            border-color: #1a4723;
+        }
+        .guestbook-btn:hover {
+            background-color: #1a4723;
+        }
+        p {
+            text-align: justify;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #3c2a1e;
+        }
+        ul {
+            font-size: 0.95em;
+            color: #3c2a1e;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+        /* Quiz Styling */
+        .quiz-container {
+            margin-top: 20px;
+        }
+        .statements-pool {
+            background: #e9dec5;
+            padding: 15px;
+            border-radius: 6px;
+            min-height: 90px;
+            margin-bottom: 20px;
+            border: 1px dashed #b59b7d;
+        }
+        .draggable-item {
+            background: #fff8e8;
+            border: 1px solid #d4c39f;
+            padding: 10px 12px;
+            margin: 6px 0;
+            border-radius: 4px;
+            cursor: grab;
+            font-size: 0.9em;
+            font-family: 'Georgia', serif;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .draggable-item:hover {
+            background: #fffdf5;
+        }
+        .draggable-item:active {
+            cursor: grabbing;
+            transform: scale(1.01);
+        }
+        .dropzones-container {
+            display: flex;
+            gap: 15px;
+        }
+        .dropzone {
+            flex: 1;
+            background: #ebdcc3;
+            border: 2px dashed #9c7c5c;
+            border-radius: 6px;
+            padding: 12px;
+            min-height: 180px;
+        }
+        .dropzone h3 {
+            margin-top: 0;
+            text-align: center;
+            border-bottom: none;
+            color: #4a2810;
+        }
+        #result-msg {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 15px;
+            font-family: 'Georgia', serif;
+        }
+    </style>
+</head>
+<body>
+
+<div class="book-container">
+    <!-- HALAMAN MATERI SEJARAH -->
+    <div id="materi-section" class="section active">
+        <h1>Perlawanan Maluku Utara: Senjakala Portugis</h1>
+        
+        <h3>1. Latar Belakang & Monopoli Rempah-Rempah</h3>
+        <p>Pada abad ke-16, Maluku Utara menjadi pusat perhatian dunia karena kekayaan rempah-rempah bernilai tinggi seperti cengkeh dan pala. Kedatangan bangsa Portugis yang dipimpin oleh Francisco Serrão pada tahun 1512 awalnya disambut baik oleh Kesultanan Ternate. Namun, ambisi kolonial mendesak mereka untuk memonopoli perdagangan, menetapkan harga sepihak, serta mencampuri urusan politik internal kerajaan.</p>
+        
+        <h3>2. Peranan Strategis Perahu Kora-Kora</h3>
+        <p>Dalam pertempuran laut, Kesultanan Ternate mengandalkan taktik kelautan brilian menggunakan <strong>Perahu Kora-Kora</strong>. Perahu perang tradisional berukuran besar dan panjang ini digerakkan oleh puluhan pendayung, memberikan kelincahan luar biasa di antara pulau-pulau untuk melakukan serangan gerilya kilat terhadap armada besar Portugis.</p>
+
+        <h3>3. Tokoh-Tokoh Utama Perlawanan</h3>
+        <ul>
+            <li><strong>Sultan Hairun Jamil:</strong> Pemimpin Ternate yang dengan gigih menentang kesewenang-wenangan Portugis, hingga gugur dibunuh secara licik di dalam Benteng Sao Paulo pada tahun 1570.</li>
+            <li><strong>Sultan Baabullah ("Penguasa 72 Pulau"):</strong> Putra Sultan Hairun yang mendeklarasikan perang total, mengepung Benteng Sao Paulo selama bertahun-tahun, dan sukses mengusir Portugis dari Maluku pada tahun 1575.</li>
+        </ul>
+
+        <button onclick="goToQuiz()">Buka Halaman Kuis &rarr;</button>
+    </div>
+
+    <!-- HALAMAN KUIS -->
+    <div id="quiz-section" class="section">
+        <h2>Kuis Interaktif Sejarah Maluku</h2>
+        <p style="text-align:center;">Seret pernyataan di bawah ini ke kolom <strong>Benar</strong> atau <strong>Salah</strong>!</p>
+
+        <div class="quiz-container">
+            <div class="statements-pool" id="pool" ondragover="allowDrop(event)" ondrop="dropToPool(event)">
+                <h4 style="margin-top:0; color:#5a2e18; border-bottom:none;">Pernyataan Sejarah:</h4>
+                <div class="draggable-item" id="item1" draggable="true" ondragstart="drag(event)" data-answer="benar">Sultan Baabullah dijuluki sebagai "Penguasa 72 Pulau".</div>
+                <div class="draggable-item" id="item2" draggable="true" ondragstart="drag(event)" data-answer="salah">Bangsa Portugis berhasil menguasai Maluku Utara hingga tahun 1945.</div>
+                <div class="draggable-item" id="item3" draggable="true" ondragstart="drag(event)" data-answer="benar">Sultan Hairun dibunuh secara licik di dalam Benteng Sao Paulo pada tahun 1570.</div>
+                <div class="draggable-item" id="item4" draggable="true" ondragstart="drag(event)" data-answer="benar">Perahu Kora-Kora merupakan perahu perang tradisional andalan armada laut Ternate.</div>
+                <div class="draggable-item" id="item5" draggable="true" ondragstart="drag(event)" data-answer="salah">Komoditas utama incaran bangsa Portugis di Maluku Utara adalah gandum dan jagung.</div>
+                <div class="draggable-item" id="item6" draggable="true" ondragstart="drag(event)" data-answer="benar">Sultan Baabullah sukses mengusir Portugis dari bumi Maluku pada tahun 1575.</div>
+                <div class="draggable-item" id="item7" draggable="true" ondragstart="drag(event)" data-answer="salah">Benteng Sao Paulo dibangun atas perintah langsung dari Sultan Ternate.</div>
+            </div>
+
+            <div class="dropzones-container">
+                <div class="dropzone" id="zone-benar" ondragover="allowDrop(event)" ondrop="drop(event, 'benar')">
+                    <h3 style="color: #276735;">BENAR</h3>
+                </div>
+                <div class="dropzone" id="zone-salah" ondragover="allowDrop(event)" ondrop="drop(event, 'salah')">
+                    <h3 style="color: #9b2c2c;">SALAH</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-msg"></div>
+        <button onclick="checkAnswers()">Cek Jawaban</button>
+        <!-- Tombol baru menuju ke Buku Tamu -->
+        <button onclick="goToBukuTamu()" class="guestbook-btn">Isi Buku Tamu &rarr;</button>
+        <button onclick="goToMateri()" class="secondary-btn">Kembali ke Materi</button>
+    </div>
+</div>
+
+<script>
+    function goToQuiz() {
+        document.getElementById('materi-section').classList.remove('active');
+        document.getElementById('quiz-section').classList.add('active');
+    }
+
+    function goToMateri() {
+        document.getElementById('quiz-section').classList.remove('active');
+        document.getElementById('materi-section').classList.add('active');
+    }
+
+    // Fungsi untuk berpindah ke halaman buku tamu
+    function goToBukuTamu() {
+        window.location.href = 'buku-tamu.html';
+    }
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev, zoneType) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var draggedElement = document.getElementById(data);
+        
+        if (ev.target.classList.contains('dropzone')) {
+            ev.target.appendChild(draggedElement);
+        } else if (ev.target.parentElement.classList.contains('dropzone')) {
+            ev.target.parentElement.appendChild(draggedElement);
+        }
+    }
+
+    function dropToPool(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var draggedElement = document.getElementById(data);
+        document.getElementById('pool').appendChild(draggedElement);
+    }
+
+    function checkAnswers() {
+        const zoneBenar = document.getElementById('zone-benar');
+        const zoneSalah = document.getElementById('zone-salah');
+        
+        let correctCount = 0;
+        let totalItems = 7;
+
+        for (let item of zoneBenar.children) {
+            if (item.dataset && item.dataset.answer === 'benar') {
+                correctCount++;
+            }
+        }
+
+        for (let item of zoneSalah.children) {
+            if (item.dataset && item.dataset.answer === 'salah') {
+                correctCount++;
+            }
+        }
+
+        const msg = document.getElementById('result-msg');
+        if (correctCount === totalItems) {
+            msg.style.color = "#276735";
+            msg.innerText = `Luar biasa! Seluruh jawaban Anda benar (${correctCount}/${totalItems})! 🎉`;
+        } else {
+            msg.style.color = "#9b2c2c";
+            msg.innerText = `Masih ada yang keliru. Jawaban benar ${correctCount} dari ${totalItems}. Silakan periksa kembali!`;
+        }
+    }
+</script>
+
+</body>
+</html>

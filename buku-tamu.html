@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Data dengan Tanda Tangan Digital</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 750px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        /* Style untuk Canvas Tanda Tangan */
+        .signature-pad {
+            border: 2px dashed #ccc;
+            background-color: #fff;
+            cursor: crosshair;
+            width: 100%;
+            height: 150px;
+            touch-action: none; /* Mencegah scrolling layar HP saat tanda tangan */
+            border-radius: 4px;
+        }
+        .btn-clear {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        .btn-clear:hover {
+            background-color: #e68a00;
+        }
+        button#submitBtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button#submitBtn:hover {
+            opacity: 0.9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        img.sig-img {
+            max-width: 120px;
+            height: auto;
+            border: 1px solid #eee;
+            background: #fff;
+        }
+        .btn-edit {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Form Input Data & Tanda Tangan</h2>
+    
+    <!-- Form Input -->
+    <form id="dataForm">
+        <div class="form-group">
+            <label for="nama">Nama:</label>
+            <input type="text" id="nama" required placeholder="Masukkan nama...">
+        </div>
+        <div class="form-group">
+            <label for="kelas">Kelas:</label>
+            <input type="text" id="kelas" required placeholder="Masukkan kelas...">
+        </div>
+        <div class="form-group">
+            <label for="skor">Skor:</label>
+            <input type="number" id="skor" required placeholder="Masukkan skor...">
+        </div>
+        
+        <!-- Kolom Tanda Tangan Canvas -->
+        <div class="form-group">
+            <label>Tanda Tangan:</label>
+            <canvas id="signatureCanvas" class="signature-pad"></canvas>
+            <button type="button" class="btn-clear" onclick="clearSignature()">Bersihkan Tanda Tangan</button>
+        </div>
+
+        <button type="submit" id="submitBtn">Tambah Data</button>
+    </form>
+
+    <!-- Tabel Hasil -->
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Skor</th>
+                <th>Tanda Tangan</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Baris data otomatis masuk sini -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const form = document.getElementById('dataForm');
+    const tableBody = document.querySelector('#dataTable tbody');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Setup Canvas Tanda Tangan
+    const canvas = document.getElementById('signatureCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    // Menyesuaikan ukuran resolusi canvas agar tidak pecah
+    function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+    }
+    window.addEventListener('load', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas);
+
+    // Fungsi Menggambar di Canvas (Mouse & Touch HP)
+    function startPosition(e) {
+        isDrawing = true;
+        draw(e);
+    }
+    function endPosition() {
+        isDrawing = false;
+        ctx.beginPath();
+    }
+    function draw(e) {
+        if (!isDrawing) return;
+        
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000';
+
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+        ctx.lineTo(clientX - rect.left, clientY - rect.top);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(clientX - rect.left, clientY - rect.top);
+    }
+
+    // Event Mouse
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', endPosition);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseleave', endPosition);
+
+    // Event Touch (HP / Tablet)
+    canvas.addEventListener('touchstart', startPosition);
+    canvas.addEventListener('touchend', endPosition);
+    canvas.addEventListener('touchmove', draw);
+
+    // Fungsi Bersihkan Canvas Tanda Tangan
+    function clearSignature() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+    }
+
+    // Cek apakah canvas kosong
+    function isCanvasBlank() {
+        const blank = document.createElement('canvas');
+        blank.width = canvas.width;
+        blank.height = canvas.height;
+        return canvas.toDataURL() === blank.toDataURL();
+    }
+
+    let dataList = [];
+    let editingId = null;
+
+    // Fungsi Update Nomor Urut Otomatis
+    function updateRowNumbers() {
+        const rows = tableBody.querySelectorAll('tr');
+        rows.forEach((row, index) => {
+            row.cells[0].textContent = index + 1;
+        });
+    }
+
+    // Submit Form
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (isCanvasBlank() && editingId === null) {
+            alert('Mohon isi tanda tangan terlebih dahulu!');
+            return;
+        }
+
+        const nama = document.getElementById('nama').value;
+        const kelas = document.getElementById('kelas').value;
+        const skor = document.getElementById('skor').value;
+        const signatureData = isCanvasBlank() ? null : canvas.toDataURL();
+
+        if (editingId !== null) {
+            // Mode Edit
+            const item = dataList.find(d => d.id === editingId);
+            if (item) {
+                item.nama = nama;
+                item.kelas = kelas;
+                item.skor = skor;
+                if (signatureData) {
+                    item.signature = signatureData; // Update tanda tangan jika digambar ulang
+                }
+            }
+            editingId = null;
+            submitBtn.textContent = 'Tambah Data';
+            submitBtn.style.backgroundColor = '#4CAF50';
+        } else {
+            // Mode Tambah
+            const newData = {
+                id: Date.now(),
+                nama: nama,
+                kelas: kelas,
+                skor: skor,
+                signature: signatureData
+            };
+            dataList.push(newData);
+        }
+
+        form.reset();
+        clearSignature();
+        renderTable();
+    });
+
+    // Render Tabel
+    function renderTable() {
+        tableBody.innerHTML = '';
+        dataList.forEach((item) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td></td>
+                <td>${item.nama}</td>
+                <td>${item.kelas}</td>
+                <td>${item.skor}</td>
+                <td><img src="${item.signature || ''}" class="sig-img" alt="Tanda Tangan"></td>
+                <td>
+                    <button type="button" class="btn-edit" onclick="editData(${item.id})">Edit</button>
+                    <button type="button" class="btn-delete" onclick="deleteData(${item.id})">Hapus</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+        updateRowNumbers();
+    }
+
+    // Fungsi Edit Data
+    function editData(id) {
+        const item = dataList.find(d => d.id === id);
+        if (!item) return;
+
+        editingId = id;
+        document.getElementById('nama').value = item.nama;
+        document.getElementById('kelas').value = item.kelas;
+        document.getElementById('skor').value = item.skor;
+        
+        // Bersihkan atau abaikan canvas saat edit (bisa digambar ulang jika mau)
+        clearSignature();
+
+        submitBtn.textContent = 'Simpan Perubahan';
+        submitBtn.style.backgroundColor = '#2196F3';
+        document.getElementById('nama').focus();
+    }
+
+    // Fungsi Hapus Data
+    function deleteData(id) {
+        if (editingId === id) {
+            editingId = null;
+            form.reset();
+            clearSignature();
+            submitBtn.textContent = 'Tambah Data';
+            submitBtn.style.backgroundColor = '#4CAF50';
+        }
+
+        dataList = dataList.filter(item => item.id !== id);
+        renderTable();
+    }
+</script>
+
+</body>
+</html>
