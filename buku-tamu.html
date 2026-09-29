@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Data dengan Tanda Tangan Digital</title>
+    <title>Buku Tamu - Data & Tanda Tangan</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,7 +44,7 @@
             cursor: crosshair;
             width: 100%;
             height: 150px;
-            touch-action: none; /* Mencegah scrolling layar HP saat tanda tangan */
+            touch-action: none; 
             border-radius: 4px;
         }
         .btn-clear {
@@ -73,6 +73,24 @@
         }
         button#submitBtn:hover {
             opacity: 0.9;
+        }
+        .btn-back {
+            background-color: #596068;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .btn-back:hover {
+            background-color: #3f4449;
         }
         table {
             width: 100%;
@@ -117,7 +135,7 @@
 <body>
 
 <div class="container">
-    <h2>Form Input Data & Tanda Tangan</h2>
+    <h2>Buku Tamu - Data & Tanda Tangan</h2>
     
     <!-- Form Input -->
     <form id="dataForm">
@@ -130,7 +148,7 @@
             <input type="text" id="kelas" required placeholder="Masukkan kelas...">
         </div>
         <div class="form-group">
-            <label for="skor">Skor:</label>
+            <label for="skor">Skor Kuis:</label>
             <input type="number" id="skor" required placeholder="Masukkan skor...">
         </div>
         
@@ -143,6 +161,9 @@
 
         <button type="submit" id="submitBtn">Tambah Data</button>
     </form>
+
+    <!-- Tombol Kembali ke Halaman Materi/Kuis -->
+    <a href="ikan.html" class="btn-back">&larr; Kembali ke Buku Sejarah & Kuis</a>
 
     <!-- Tabel Hasil -->
     <table id="dataTable">
@@ -172,7 +193,6 @@
     const ctx = canvas.getContext('2d');
     let isDrawing = false;
 
-    // Menyesuaikan ukuran resolusi canvas agar tidak pecah
     function resizeCanvas() {
         const rect = canvas.getBoundingClientRect();
         canvas.width = rect.width;
@@ -181,7 +201,6 @@
     window.addEventListener('load', resizeCanvas);
     window.addEventListener('resize', resizeCanvas);
 
-    // Fungsi Menggambar di Canvas (Mouse & Touch HP)
     function startPosition(e) {
         isDrawing = true;
         draw(e);
@@ -207,24 +226,20 @@
         ctx.moveTo(clientX - rect.left, clientY - rect.top);
     }
 
-    // Event Mouse
     canvas.addEventListener('mousedown', startPosition);
     canvas.addEventListener('mouseup', endPosition);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseleave', endPosition);
 
-    // Event Touch (HP / Tablet)
     canvas.addEventListener('touchstart', startPosition);
     canvas.addEventListener('touchend', endPosition);
     canvas.addEventListener('touchmove', draw);
 
-    // Fungsi Bersihkan Canvas Tanda Tangan
     function clearSignature() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
     }
 
-    // Cek apakah canvas kosong
     function isCanvasBlank() {
         const blank = document.createElement('canvas');
         blank.width = canvas.width;
@@ -232,10 +247,15 @@
         return canvas.toDataURL() === blank.toDataURL();
     }
 
-    let dataList = [];
+    // Memuat data dari localStorage saat halaman dibuka (jika ada)
+    let dataList = JSON.parse(localStorage.getItem('bukuTamuData')) || [];
     let editingId = null;
 
-    // Fungsi Update Nomor Urut Otomatis
+    // Fungsi untuk menyimpan data ke localStorage
+    function saveData() {
+        localStorage.setItem('bukuTamuData', JSON.stringify(dataList));
+    }
+
     function updateRowNumbers() {
         const rows = tableBody.querySelectorAll('tr');
         rows.forEach((row, index) => {
@@ -265,7 +285,7 @@
                 item.kelas = kelas;
                 item.skor = skor;
                 if (signatureData) {
-                    item.signature = signatureData; // Update tanda tangan jika digambar ulang
+                    item.signature = signatureData; 
                 }
             }
             editingId = null;
@@ -283,6 +303,7 @@
             dataList.push(newData);
         }
 
+        saveData(); // Simpan perubahan ke memori browser
         form.reset();
         clearSignature();
         renderTable();
@@ -309,7 +330,6 @@
         updateRowNumbers();
     }
 
-    // Fungsi Edit Data
     function editData(id) {
         const item = dataList.find(d => d.id === id);
         if (!item) return;
@@ -319,7 +339,6 @@
         document.getElementById('kelas').value = item.kelas;
         document.getElementById('skor').value = item.skor;
         
-        // Bersihkan atau abaikan canvas saat edit (bisa digambar ulang jika mau)
         clearSignature();
 
         submitBtn.textContent = 'Simpan Perubahan';
@@ -327,7 +346,6 @@
         document.getElementById('nama').focus();
     }
 
-    // Fungsi Hapus Data
     function deleteData(id) {
         if (editingId === id) {
             editingId = null;
@@ -338,8 +356,12 @@
         }
 
         dataList = dataList.filter(item => item.id !== id);
+        saveData(); // Perbarui penyimpanan browser setelah dihapus
         renderTable();
     }
+
+    // Jalankan render tabel saat pertama kali halaman dimuat
+    renderTable();
 </script>
 
 </body>
